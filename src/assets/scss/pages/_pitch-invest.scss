@@ -533,7 +533,7 @@ $pi-transition: all 0.3s ease;
   // background: linear-gradient(to bottom, #f8fafc, #ffffff);
   overflow-x: hidden;
   --pi-bg-near-x: 500px;
-  --pi-bg-far-x: 800px;
+  --pi-bg-far-x: 740px;
 }
 
 .pi-featured-carousel-inner {
@@ -558,13 +558,13 @@ $pi-transition: all 0.3s ease;
 
 html[data-sidebar-size="lg"] .pi-featured-carousel {
   --pi-bg-near-x: 440px;
-  --pi-bg-far-x: 720px;
+  --pi-bg-far-x: 700px;
 }
 
 @media (min-width: 1536px) {
   html[data-sidebar-size="lg"] .pi-featured-carousel {
     --pi-bg-near-x: 470px;
-    --pi-bg-far-x: 760px;
+    --pi-bg-far-x: 660px;
   }
 }
 
@@ -601,6 +601,7 @@ html[data-sidebar-size="lg"] .pi-featured-carousel-inner {
 .pi-carousel-side-card-left {
   @media (min-width: 992px) {
     margin-left: -24px;
+    margin-top: -8rem;
   }
 
   @media (min-width: 1536px) {
@@ -611,6 +612,7 @@ html[data-sidebar-size="lg"] .pi-featured-carousel-inner {
 .pi-carousel-side-card-right {
   @media (min-width: 992px) {
     margin-right: -24px;
+    margin-top: -8rem;
   }
 
   @media (min-width: 1536px) {
@@ -645,7 +647,7 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
 .pi-carousel-center {
   width: 100%;
   max-width: 100%;
-
+  
   @media (min-width: 992px) {
     width: 650px; // matches reference lg width
     flex: 0 0 auto;
@@ -699,7 +701,7 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
 }
 
 .pi-left-product-img {
-  height: 96px;
+  height: 112px;
   border-radius: 0.5rem;
   object-fit: cover;
 
@@ -935,6 +937,12 @@ html[data-sidebar-size="lg"] .pi-carousel-nav-btn-next {
     border-color: darken(#0a3d5c, 10%);
     color: #fff;
   }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 .pi-carousel-btn-secondary {
@@ -947,7 +955,64 @@ html[data-sidebar-size="lg"] .pi-carousel-nav-btn-next {
     background: #0a3d5c;
     color: #fff;
   }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 }
+
+// ============================================
+// AD SLOT (BELOW TOGGLE)
+// ============================================
+.pi-carousel-ad-slot {
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 768px) {
+    max-width: 500px; // matches center image at md
+  }
+
+  @media (min-width: 992px) {
+    max-width: 650px; // matches center image at lg
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 700px; // matches center image at 2xl
+  }
+}
+
+.pi-carousel-ad-link {
+  position: relative;
+  display: flex;              // ✅ enable flex
+  align-items: center;        // vertical center
+  justify-content: center;    // horizontal center
+  // height: 40px;
+  // background: #fff;
+  // border: 1px solid #e6e6e6;
+  // box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  // @media (min-width: 768px) {
+  //   height: 60px;
+  // }
+
+
+}
+
+/* 🔹 Ad image */
+.pi-carousel-ad-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: scale(0.9, 0.5);   // 🔹 width 80%, height 50%
+  transform-origin: center;
+}
+
 
 .video-frame {
   background: linear-gradient(135deg, $pi-primary 0%, $pi-secondary 100%);
@@ -1698,4 +1763,52 @@ transition: all 500ms ease !important;
 }
 .carousel-card-border{
   border-color: #0a3d5c !important;
+}
+
+// ============================================
+// LAYOUT OVERRIDES (FIX EXTRA BLANK SPACE)
+// ============================================
+// Velzon's default collapsed sidebar styles set an aggressive `min-height: 1400px`
+// on the layout wrapper, which creates large empty areas below short pages.
+html:is([data-layout="vertical"], [data-layout="semibox"]):is(
+    [data-sidebar-size="sm"],
+    [data-sidebar-size="sm-hover"],
+    [data-sidebar-size="sm-hover-active"]
+  ) {
+  min-height: 100vh !important;
+
+  #layout-wrapper,
+  .main-content {
+    min-height: 100vh !important;
+  }
+}
+
+
+.navigation-top{
+  top: 33% !important;
+}
+
+
+
+
+
+
+.pi-left-card-body {
+  position: relative;   // ✅ anchor for absolute logo
+  padding-top: 40px;    // keep your existing spacing
+}
+
+.pi-small-logo {
+  position: absolute;
+  top: 10px;            // adjust to taste
+  right: 12px;          // adjust to taste
+  z-index: 5;
+  pointer-events: none; // optional: don’t block clicks
+}
+
+.pi-small-logo img {
+  width: 52px;          // ✅ smaller than 50 so it looks “premium”
+  height: 52px;
+  object-fit: contain;
+  opacity: 0.95;        // optional
 }

@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody } from "reactstrap";
 import usersData from "../../lib/usersData";
-
+import smallLogo from "../../assets/images/main-logo/small-logo.png";
 interface FeaturedCarouselProps {
 	startups: unknown[];
 	onOpenVideo: (startup: unknown) => void;
@@ -24,7 +24,7 @@ const investorData = [
 			company: "NEURO CAPITAL",
 			name: "Dr. Yuki Nakamura",
 			location: "Tokyo, Japan",
-			title: "Healthcare Tech Investor",
+			title: "Co Fondateur",
 			likes: usersData[0]?.likes ?? 0,
 			views: usersData[0]?.views ?? 0,
 			portfolio: [
@@ -46,7 +46,7 @@ const investorData = [
 			company: "ASIA VENTURES",
 			name: "Mr. James Wong",
 			location: "Singapore",
-			title: "Tech Entrepreneur",
+			title: "Co Fondateur",
 			likes: usersData[1]?.likes ?? 0,
 			views: usersData[1]?.views ?? 0,
 			portfolio: [
@@ -68,7 +68,7 @@ const investorData = [
 			company: "EU CAPITAL",
 			name: "Ms. Marie Dubois",
 			location: "Paris, France",
-			title: "Sustainable Tech Investor",
+			title: "Investment Director",
 			likes: usersData[2]?.likes ?? 0,
 			views: usersData[2]?.views ?? 0,
 			portfolio: [
@@ -90,7 +90,7 @@ const investorData = [
 			company: "SILICON VALLEY FUND",
 			name: "Lisa Anderson",
 			location: "Palo Alto, USA",
-			title: "Venture Capital Partner",
+			title: "General Manager",
 			likes: usersData[3]?.likes ?? 0,
 			views: usersData[3]?.views ?? 0,
 			portfolio: [
@@ -112,7 +112,7 @@ const investorData = [
 			company: "ASIA TECH VENTURES",
 			name: "Priya Sharma",
 			location: "Bangalore, India",
-			title: "Digital Finance Investor",
+			title: "Executive Director",
 			likes: usersData[4]?.likes ?? 0,
 			views: usersData[4]?.views ?? 0,
 			portfolio: [
@@ -134,6 +134,12 @@ const resolveAssetPath = (path: string) => {
 	if (path.startsWith("http://") || path.startsWith("https://")) return path;
 	if (path.startsWith("/")) return path;
 	return `/${path}`;
+};
+
+const featuredPartnerAd = {
+	label: "Sponsored",
+	imageSrc: "/assets/ad.png",
+	href: "https://example.com",
 };
 
 const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
@@ -216,21 +222,20 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 							>
 								<div
 									className="position-absolute border-4 "
-									style={{ bottom: -56, left: 16 }}
+									style={{ bottom: -76, left: 16 }}
 								>
 									<img
 										src={currentUser.avatar}
 										alt={currentUser.name}
 										className="rounded-circle border border-4 carousel-card-border"
 										style={{
-											width: 128,
-											height: 128,
-											
+											width: 140,
+											height: 140,
 											objectFit: "cover",
 										}}
 									/>
 								</div>
-								<div className="position-absolute top-0 end-0 m-2">
+								<div className="position-absolute top-0 end-0 m-3">
 									<div className="bg-white rounded-circle p-1">
 										<img
 											src={currentUser.companyLogo}
@@ -241,14 +246,12 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									</div>
 								</div>
 							</div>
-							<CardBody className="px-4 pb-4" style={{ paddingTop: 40 }}>
-								<div
-									className="text-end fw-semibold text-muted mb-3 "
-									style={{ fontSize: "0.875rem" }}
-								>
-									{currentUser.companyName}
-								</div>
-								<div className="mb-3" style={{ fontSize: "0.875rem" }}>
+							<CardBody className="px-4 pb-3 pt-60 pi-left-card-body">
+							    <div className="pi-small-logo ">
+                                    <img src={smallLogo} alt="small-logo" />
+                                </div>
+								
+								<div className="mb-3 mt-5" style={{ fontSize: "0.875rem" }}>
 									<div className="mb-1">
 										<span className="fw-semibold">Nome:</span>{" "}
 										{currentUser.name}
@@ -333,12 +336,11 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									<div className="d-flex justify-content-center gap-2">
 										<button
 											type="button"
-											className="btn btn-sm d-flex align-items-center gap-1 "
+											className="btn  d-flex align-items-center gap-1 "
 											style={{
 												backgroundColor: "#f3f4f6",
 												border: "none",
-												fontSize: "0.875rem",
-												
+												fontSize: "1.2rem",
 											}}
 										>
 											<i className="ri-thumb-up-fill text-warning"></i>
@@ -346,11 +348,11 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										</button>
 										<button
 											type="button"
-											className="btn btn-sm d-flex align-items-center gap-1"
+											className="btn  d-flex align-items-center gap-1"
 											style={{
 												backgroundColor: "#f3f4f6",
 												border: "none",
-												fontSize: "0.875rem",
+												fontSize: "1.2rem",
 											}}
 										>
 											<i className="ri-eye-line"></i>
@@ -367,7 +369,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 						<button
 							type="button"
 							onClick={handlePrevious}
-							className="d-none d-lg-flex position-absolute align-items-center justify-content-center start-0 top-50 translate-middle-y rounded-circle pi-carousel-nav-btn pi-carousel-nav-btn-prev"
+							className="d-none d-lg-flex position-absolute align-items-center justify-content-center start-0 navigation-top translate-middle-y rounded-circle pi-carousel-nav-btn pi-carousel-nav-btn-prev"
 							style={{ width: 48, height: 48, zIndex: 30 }}
 							aria-label="Previous image"
 						>
@@ -402,7 +404,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 							<button
 								type="button"
 								onClick={() => changeIndex(visible.prev)}
-								className="d-none d-lg-block position-absolute pi-carousel-img-frame pi-carousel-bg-near"
+								className="d-none d-lg-block position-absolute pi-carousel-img-frame pi-carousel-bg-near "
 								onKeyDown={(event) =>
 									handleCarouselImageKeyDown(event, visible.prev)
 								}
@@ -469,7 +471,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 						<button
 							type="button"
 							onClick={handleNext}
-							className="d-none d-lg-flex position-absolute align-items-center justify-content-center end-0 top-50 translate-middle-y rounded-circle pi-carousel-nav-btn pi-carousel-nav-btn-next"
+							className="d-none d-lg-flex position-absolute align-items-center justify-content-center end-0 navigation-top translate-middle-y rounded-circle pi-carousel-nav-btn pi-carousel-nav-btn-next"
 							style={{
 								width: 48,
 								height: 48,
@@ -493,7 +495,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									/>
 								))}
 							</div>
-							<div className="d-flex d-lg-none gap-4 justify-content-center mb-4">
+							<div className="d-flex d-lg-none  justify-content-center mb-4">
 								<button
 									type="button"
 									onClick={handlePrevious}
@@ -523,9 +525,6 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									style={{ left: `calc(${progress}% - 8px)` }}
 								/>
 							</div>
-							<div className="mx-auto mt-2 pi-carousel-progress-shadow">
-								<div className="w-100 pi-carousel-progress-shadow-line" />
-							</div>
 						</div>
 						<div className="d-flex justify-content-center gap-4 mt-3">
 							<button
@@ -543,6 +542,24 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 							>
 								Investor
 							</button>
+						</div>
+						<div className="pi-carousel-ad-slot mt-1">
+							<a
+								href={featuredPartnerAd.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="pi-carousel-ad-link"
+								aria-label="Sponsored link"
+							>
+								{/* <span className="pi-carousel-ad-label">
+									{featuredPartnerAd.label}
+								</span> */}
+								<img
+									src={featuredPartnerAd.imageSrc}
+									alt={featuredPartnerAd.label}
+									className="pi-carousel-ad-image"
+								/>
+							</a>
 						</div>
 					</div>
 
@@ -572,56 +589,68 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									{rightData.company}
 								</div>
 							</div>
-							<CardBody
-								className="position-relative px-4 pb-4"
-								style={{ paddingTop: 20 }}
-							>
-								<div
-									className="position-absolute d-flex"
-									style={{ top: -56, left: 16, height: 144 }}
+								<CardBody
+									className="position-relative px-4 pb-3"
+									style={{ paddingTop: 20 }}
 								>
-									<div
-										className="rounded-circle overflow-hidden border border-4 bg-white shadow carousel-card-border"
-										style={{ width: 128, height: 128 }}
-									>
-										<img
-											key={`${currentIndex}-${rightData.avatar}`}
-											src={resolveAssetPath(rightData.avatar)}
-											alt={rightData.name}
-											className="w-100 h-100"
-											style={{ objectFit: "cover" }}
-										/>
-									</div>
-									<div
-										className="d-flex flex-column justify-content-end"
-										style={{ height: 144 }}
-									>
-										<h3
-											className="text-dark fw-semibold mb-1"
-											style={{ fontSize: "1.25rem" }}
-										>
-											{rightData.name}
-										</h3>
-										<div className="d-flex align-items-center gap-1 mb-2">
-											<div
-												className="text-muted"
-												style={{ fontSize: "0.875rem" }}
-											>
-												{rightData.location}
-											</div>
-											<img
-												src="/assets/flags/JP.png"
-												style={{ width: 32, height: 24 }}
-												alt="flag"
-											/>
+										<div className="pi-small-logo">
+											<img src={smallLogo} alt="small-logo" />
 										</div>
-									</div>
-								</div>
-								<div style={{ paddingTop: 100 }}>
-									<div className="d-flex justify-content-center mb-3 gap-3">
-										<button
-											type="button"
-											className="flex-fill rounded-pill fw-semibold pi-right-btn"
+										<div
+											className="position-absolute"
+											style={{ top: -56, left: 16, right: 16 }}
+										>
+											<div
+												className="rounded-circle overflow-hidden border border-4 bg-white shadow carousel-card-border"
+												style={{ width: 140, height: 140 }}
+											>
+											<img
+												key={`${currentIndex}-${rightData.avatar}`}
+												src={resolveAssetPath(rightData.avatar)}
+												alt={rightData.name}
+												className="w-100 h-100"
+													style={{ objectFit: "cover" }}
+												/>
+											</div>
+											<div className="d-flex align-items-end justify-content-between mt-2">
+												<div className="d-flex flex-column items-center text-center">
+													<div
+														className="text-dark fw-semibold"
+														style={{ fontSize: "1.05rem", lineHeight: 1.15 }}
+													>
+														{rightData.name}
+													</div>
+													<div
+														className="text-muted"
+														style={{ fontSize: "0.85rem", lineHeight: 1.1 }}
+													>
+														{rightData.title}
+													</div>
+												</div>
+												<div className="d-flex align-items-center gap-2">
+													<div
+														className="text-muted text-nowrap"
+														style={{ fontSize: "0.85rem" }}
+													>
+														{rightData.location}
+													</div>
+													<span
+														className="d-inline-block rounded-circle"
+														style={{
+															width: 10,
+															height: 10,
+															backgroundColor: "#be123c",
+														}}
+														aria-hidden="true"
+													/>
+												</div>
+											</div>
+										</div>
+									<div style={{ paddingTop: 138 }}>
+										<div className="d-flex justify-content-center mb-2 gap-3">
+											<button
+												type="button"
+												className="flex-fill  rounded-pill fw-semibold pi-left-btn-message"
 											onClick={(e) => e.stopPropagation()}
 										>
 											Message
@@ -638,12 +667,12 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										</button>
 									</div>
 									<div
-										className="text-center fw-semibold text-uppercase mb-3"
+										className="text-center fw-semibold text-uppercase mb-2"
 										style={{ fontSize: "0.875rem" }}
 									>
 										Portfolio Companies
 									</div>
-									<div className="row g-3 mb-4">
+									<div className="row g-3 mb-3">
 										{(rightData.portfolio || []).slice(0, 6).map((p) => (
 											<div
 												key={p.name}
@@ -660,7 +689,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 											</div>
 										))}
 									</div>
-									<div className="text-center fw-bold mb-2 fs-5">
+									<div className="text-center fw-bold mb-1 fs-5">
 										Company Description
 									</div>
 									<div className="text-center pi-right-description">
@@ -669,17 +698,16 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									<div className="d-flex justify-content-center gap-2 mt-3">
 										<button
 											type="button"
-											className="btn btn-sm d-flex align-items-center gap-1"
+											className="btn  d-flex align-items-center gap-1"
 											style={{
 												backgroundColor: "#f3f4f6",
 												border: "none",
-												fontSize: "0.875rem",
+												fontSize: "1.2rem",
 											}}
 										>
 											<i className="ri-thumb-up-fill text-warning rounded-pill"></i>
 											<span>{rightData.likes ?? 0}</span>
 										</button>
-									
 									</div>
 								</div>
 							</CardBody>
@@ -692,4 +720,3 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 };
 
 export default FeaturedCarousel;
-

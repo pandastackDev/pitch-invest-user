@@ -14,6 +14,7 @@ node_modules
 *.env.development.local
 *.env.test.local
 
-./build
+.build/
+/build/
 .env.example
 .env.production
