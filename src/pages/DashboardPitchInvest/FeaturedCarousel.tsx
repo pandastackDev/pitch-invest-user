@@ -202,7 +202,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 					{/* Left Card */}
 					<div className="order-2 order-lg-1 w-100 pi-carousel-side-card pi-carousel-side-card-left">
 						<Card
-							className="border-0 shadow-lg h-100 overflow-hidden"
+							className="border-0 shadow-lg h-100 overflow-hidden carousel-card-body-shadow"
 							style={{ borderRadius: "1rem", cursor: "pointer" }}
 							onClick={() => navigate(`/project/${currentUser.id}`)}
 						>
@@ -215,17 +215,17 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 								}}
 							>
 								<div
-									className="position-absolute"
+									className="position-absolute border-4 "
 									style={{ bottom: -56, left: 16 }}
 								>
 									<img
 										src={currentUser.avatar}
 										alt={currentUser.name}
-										className="rounded-circle border border-4"
+										className="rounded-circle border border-4 carousel-card-border"
 										style={{
 											width: 128,
 											height: 128,
-											borderColor: "#0a3d5c",
+											
 											objectFit: "cover",
 										}}
 									/>
@@ -243,7 +243,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 							</div>
 							<CardBody className="px-4 pb-4" style={{ paddingTop: 40 }}>
 								<div
-									className="text-end fw-semibold text-muted mb-3"
+									className="text-end fw-semibold text-muted mb-3 "
 									style={{ fontSize: "0.875rem" }}
 								>
 									{currentUser.companyName}
@@ -317,7 +317,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										/>
 									</div>
 								</div>
-								<div className="bg-light rounded p-3 text-center">
+								<div className="bg-gray-50 rounded p-3 text-center">
 									<div className="fw-bold mb-1">
 										Office Computer for utility purposes
 									</div>
@@ -333,11 +333,12 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									<div className="d-flex justify-content-center gap-2">
 										<button
 											type="button"
-											className="btn btn-sm d-flex align-items-center gap-1"
+											className="btn btn-sm d-flex align-items-center gap-1 "
 											style={{
 												backgroundColor: "#f3f4f6",
 												border: "none",
 												fontSize: "0.875rem",
+												
 											}}
 										>
 											<i className="ri-thumb-up-fill text-warning"></i>
@@ -548,7 +549,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 					{/* Right Card */}
 					<div className="order-3 w-100 pi-carousel-side-card pi-carousel-side-card-right">
 						<Card
-							className="border-0 shadow-lg overflow-hidden"
+							className="border-0 shadow-lg overflow-hidden carousel-card-body-shadow"
 							style={{ borderRadius: "1rem", cursor: "pointer" }}
 							onClick={() => navigate("/investors")}
 						>
@@ -580,8 +581,8 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									style={{ top: -56, left: 16, height: 144 }}
 								>
 									<div
-										className="rounded-circle overflow-hidden border border-4 bg-white shadow"
-										style={{ width: 128, height: 128, borderColor: "#0a3d5c" }}
+										className="rounded-circle overflow-hidden border border-4 bg-white shadow carousel-card-border"
+										style={{ width: 128, height: 128 }}
 									>
 										<img
 											key={`${currentIndex}-${rightData.avatar}`}
@@ -691,3 +692,4 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 };
 
 export default FeaturedCarousel;
+

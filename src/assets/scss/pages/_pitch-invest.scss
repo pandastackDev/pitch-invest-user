@@ -1675,3 +1675,27 @@ html[data-sidebar-size="lg"] .pi-carousel-nav-btn-next {
 .cursor-pointer {
   cursor: pointer;
 }
+
+
+
+
+
+.carousel-card-body-shadow {
+  
+  &:hover{box-shadow: 0 16px 32px 0 rgba(158, 157, 157, 0.781) !important ;
+    
+
+transition: all 500ms ease !important;
+
+
+  }
+  
+}
+
+.bg-gray-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1)) !important;
+}
+.carousel-card-border{
+  border-color: #0a3d5c !important;
+}
