@@ -1,0 +1,21 @@
+import { Container } from "reactstrap";
+import BreadCrumb from "../../../../Components/Common/BreadCrumb";
+import FeedbackAction from "./FeedbackAction";
+import InvoiceAction from "./InvoiceAction";
+import RatingTemplate from "./RatingTemplate";
+
+const index = () => {
+	document.title = "Invoice Action | Velzon - React Admin & Dashboard Template";
+	return (
+		<div className="page-content">
+			<Container fluid>
+				<BreadCrumb title="Ecommerce Action" pageTitle="Email" />
+				<InvoiceAction />
+				<FeedbackAction />
+				<RatingTemplate />
+			</Container>
+		</div>
+	);
+};
+
+export default index;

@@ -1,0 +1,20 @@
+{
+  "Menu": "메뉴",
+  "Search": "검색",
+  "Gallery": "갤러리",
+  "Investors": "투자자",
+  "Highlights": "하이라이트",
+  "Offers": "제안",
+  "Blog": "블로그",
+  "Contact": "연락처",
+  "About Us": "회사 소개",
+  "Language": "언어",
+  "Sitemap": "Sitemap",
+  "Search Results": "Search Results"
+  ,"WelcomeUser": "환영합니다 {{name}}!",
+  "Profile": "프로필",
+  "Messages": "메시지",
+  "Settings": "설정",
+  "Logout": "로그아웃",
+  "SigningOut": "로그아웃 중..."
+}

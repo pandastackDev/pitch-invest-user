@@ -1,0 +1,20 @@
+{
+  "Menu": "תפריט",
+  "Search": "חיפוש",
+  "Gallery": "גלריה",
+  "Investors": "משקיעים",
+  "Highlights": "הדגשים",
+  "Offers": "הצעות",
+  "Blog": "בלוג",
+  "Contact": "צור קשר",
+  "About Us": "אודותינו",
+  "Language": "שפה",
+  "Sitemap": "Sitemap",
+  "Search Results": "Search Results"
+  ,"WelcomeUser": "ברוך הבא {{name}}!",
+  "Profile": "פרופיל",
+  "Messages": "הודעות",
+  "Settings": "הגדרות",
+  "Logout": "התנתק",
+  "SigningOut": "מתנתק..."
+}
