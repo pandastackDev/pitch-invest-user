@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Badge, Button, Card, CardBody } from "reactstrap";
 import type { GalleryItem } from "../../../types/gallery";
-import brandIcon from "../../../assets/images/main-logo/small-logo.png";
+import mediaLogo from "../../../assets/images/logo-light.png";
 
 type GalleryCardProps = {
 	item: GalleryItem;
@@ -51,6 +51,12 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 				<div className="pi-gallery-media-grid">
 					<div className="pi-gallery-media-tile pi-gallery-media-tile-main">
 						<img
+							src={mediaLogo}
+							alt=""
+							aria-hidden="true"
+							className="pi-media-brand-seal"
+						/>
+						<img
 							src={photoA}
 							alt={item.title}
 							onError={(e) => {
@@ -62,6 +68,12 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 					<div className="pi-gallery-media-col">
 						<div className="pi-gallery-media-tile">
 							<img
+								src={mediaLogo}
+								alt=""
+								aria-hidden="true"
+								className="pi-media-brand-seal"
+							/>
+							<img
 								src={photoB}
 								alt={item.title}
 								onError={(e) => {
@@ -70,6 +82,12 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 							/>
 						</div>
 						<div className="pi-gallery-media-tile pi-gallery-media-video">
+							<img
+								src={mediaLogo}
+								alt=""
+								aria-hidden="true"
+								className="pi-media-brand-seal"
+							/>
 							<img
 								src={videoThumb}
 								alt={`${item.title} - video`}
@@ -83,13 +101,6 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 						</div>
 					</div>
 				</div>
-
-				<img
-					src={brandIcon}
-					alt=""
-					aria-hidden="true"
-					className="pi-gallery-card-brand"
-				/>
 
 				<div className="pi-gallery-card-media-meta">
 					<Badge className="pi-gallery-pill">8 Photos</Badge>

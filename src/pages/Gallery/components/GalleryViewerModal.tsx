@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
 import type { GalleryItem } from "../../../types/gallery";
+import mediaLogo from "../../../assets/images/logo-light.png";
 
 type ViewerTab = "photos" | "videos";
 
@@ -100,6 +101,12 @@ const GalleryViewerModal: React.FC<Props> = ({ isOpen, item, onClose, onClosed }
 				{tab === "photos" ? (
 					<div className="pi-gallery-viewer-stage">
 						<img
+							src={mediaLogo}
+							alt=""
+							aria-hidden="true"
+							className="pi-media-brand-seal pi-media-brand-seal--viewer"
+						/>
+						<img
 							src={photoSrc}
 							alt={item?.title ?? "Photo"}
 							className="pi-gallery-viewer-media"
@@ -135,12 +142,20 @@ const GalleryViewerModal: React.FC<Props> = ({ isOpen, item, onClose, onClosed }
 					</div>
 				) : (
 					<div className="pi-gallery-viewer-stage">
+						<img
+							src={mediaLogo}
+							alt=""
+							aria-hidden="true"
+							className="pi-media-brand-seal pi-media-brand-seal--viewer"
+						/>
 						{video ? (
 							<video
 								className="pi-gallery-viewer-media"
 								controls
 								playsInline
 								src={video.src}
+								poster={video.thumb || item?.imageUrl || "/assets/default-cover.png"}
+								preload="metadata"
 							/>
 						) : (
 							<div className="pi-gallery-viewer-empty">
@@ -188,6 +203,8 @@ const GalleryViewerModal: React.FC<Props> = ({ isOpen, item, onClose, onClosed }
 											src={v.thumb || item?.imageUrl || "/assets/default-cover.png"}
 											alt=""
 											aria-hidden="true"
+											loading="lazy"
+											decoding="async"
 										/>
 										<span className="pi-gallery-viewer-thumb-play">
 											<i className="ri-play-fill"></i>
@@ -204,4 +221,3 @@ const GalleryViewerModal: React.FC<Props> = ({ isOpen, item, onClose, onClosed }
 };
 
 export default GalleryViewerModal;
-

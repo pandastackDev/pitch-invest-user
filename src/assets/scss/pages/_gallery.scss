@@ -126,8 +126,9 @@
 // =====================================================
 
 .pi-gallery-page {
-    // Behave like a centered container while keeping <Container fluid>
-    max-width: 1320px;
+    // Keep the page premium (not edge-to-edge), but avoid huge empty gutters.
+    // (1480+ felt too wide on desktop, so keep it slightly tighter.)
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1rem;
@@ -310,10 +311,25 @@
 .pi-gallery-card-media {
     position: relative;
     display: block;
-    height: 190px;
+    // Ratio-based media block so images don't feel "cut" at the bottom.
+    aspect-ratio: 3 / 2;
+    height: auto;
+    min-height: 200px;
     overflow: hidden;
     background: #f1f3f5;
     cursor: pointer;
+
+    @media (max-width: 575.98px) {
+        min-height: 190px;
+    }
+
+    @media (min-width: 992px) {
+        min-height: 220px;
+    }
+
+    @media (min-width: 1400px) {
+        min-height: 235px;
+    }
 }
 
 .pi-gallery-media-grid {
@@ -321,8 +337,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 6px;
-    padding: 8px;
+    gap: 4px;
+    padding: 6px;
 }
 
 .pi-gallery-media-tile {
@@ -331,22 +347,30 @@
     border-radius: 14px;
     background: #e9ecef;
 
-    img {
+    // Only the actual media images should fill the tile.
+    // The brand seal is an overlay, so it must not be stretched to 100%.
+    > img:not(.pi-media-brand-seal) {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
         transition: transform 0.35s ease;
     }
 }
 
 .pi-gallery-media-tile-main {
     grid-row: 1 / span 2;
+
+    img {
+        // Show a bit more of the bottom part (less "cut" feeling).
+        object-position: center 60%;
+    }
 }
 
 .pi-gallery-media-col {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    gap: 6px;
+    gap: 4px;
 }
 
 .pi-gallery-card:hover .pi-gallery-media-tile img {
@@ -362,6 +386,42 @@
     }
 }
 
+.pi-media-brand-seal {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 56px;
+    height: 56px;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 3;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.28));
+
+    @media (max-width: 575.98px) {
+        width: 16px;
+        height: 16px;
+        top: 7px;
+        right: 7px;
+    }
+}
+
+.pi-media-brand-seal--viewer {
+    width: 22px;
+    height: 22px;
+    top: 12px;
+    right: 12px;
+    z-index: 4;
+    opacity: 0.85;
+
+    @media (max-width: 575.98px) {
+        width: 20px;
+        height: 20px;
+        top: 10px;
+        right: 10px;
+    }
+}
+
 .pi-gallery-media-play {
     position: absolute;
     inset: 0;
@@ -369,7 +429,7 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    z-index: 1;
+    z-index: 2;
 
     i {
         width: 42px;
@@ -383,17 +443,6 @@
         font-size: 1.25rem;
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
     }
-}
-
-.pi-gallery-card-brand {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 72px;
-    height: 72px;
-    object-fit: contain;
-    opacity: 0.9;
-    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
 }
 
 .pi-gallery-card-media-meta {
@@ -411,14 +460,18 @@
     letter-spacing: 0.02em;
     padding: 6px 10px;
     font-size: 0.72rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    color: #0a3d5c;
+
+    // Override Bootstrap/Velzon badge colors (removes lilac/purple look).
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(213, 183, 117, 0.65) !important;
+    color: #0a3d5c !important;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
 .pi-gallery-pill-muted {
-    background: rgba(10, 61, 92, 0.06);
-    border-color: rgba(10, 61, 92, 0.08);
+    background-color: rgba(213, 183, 117, 0.18) !important;
+    border-color: rgba(213, 183, 117, 0.55) !important;
+    color: #0a3d5c !important;
 }
 
 .pi-gallery-card-title {
@@ -655,6 +708,7 @@
     background: rgba(0, 0, 0, 0.25);
 }
 
+
 .pi-gallery-viewer-nav {
     position: absolute;
     top: 50%;
@@ -768,4 +822,3 @@
     font-weight: $font-weight-semibold;
     margin-bottom: 0.25rem;
 }
-
