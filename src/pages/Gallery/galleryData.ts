@@ -47,6 +47,8 @@ export const galleryItems = [
 		location: "United States",
 		description: "Biodegradable algae-based plastic alternative",
 		profileType: "inventor",
+		verifiedIdentity: true,
+		verifiedCompany: true,
 		media: buildMedia(
 			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp",
 		),
@@ -78,6 +80,7 @@ export const galleryItems = [
 		location: "United Kingdom",
 		description: "AI-driven generative robotics artwork",
 		profileType: "inventor",
+		verifiedIdentity: true,
 		media: buildMedia(
 			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp",
 		),
@@ -142,6 +145,7 @@ export const galleryItems = [
 		location: "France",
 		description: "Speculative computing device inspired by classic sci-fi",
 		profileType: "inventor",
+		verifiedCompany: true,
 		media: buildMedia(
 			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp",
 		),

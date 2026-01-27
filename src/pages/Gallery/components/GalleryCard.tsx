@@ -30,6 +30,13 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 	const photoB = item.media?.photos?.[1] ?? photoA;
 	const videoThumb = item.media?.videos?.[0]?.thumb ?? photoA;
 
+	const verifiedIdentity = !!item.verifiedIdentity;
+	const verifiedCompany = !!item.verifiedCompany;
+	const verificationLabels = [
+		verifiedIdentity ? "Verified identity" : null,
+		verifiedCompany ? "Verified company" : null,
+	].filter(Boolean) as string[];
+
 	const openViewer = () => onOpenViewer?.(item);
 
 	return (
@@ -48,6 +55,16 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 			}}
 		>
 			<div className="pi-gallery-card-media">
+				{/* {verificationLabels.length > 0 ? (
+					<div className="pi-gallery-verify-flags" aria-label="Verification flags">
+						{verificationLabels.map((label) => (
+							<span key={`${idStr}-${label}`} className="pi-gallery-verify-flag">
+								<i className="ri-verified-badge-fill"></i>
+								<span className="ms-1">{label}</span>
+							</span>
+						))}
+					</div>
+				) : null} */}
 				<div className="pi-gallery-media-grid">
 					<div className="pi-gallery-media-tile pi-gallery-media-tile-main">
 						<img
@@ -110,7 +127,18 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 
 			<CardBody className="d-flex flex-column">
 				<div className="d-flex align-items-start justify-content-between gap-2 mb-2">
-					<h6 className="pi-gallery-card-title mb-0">{item.title}</h6>
+					<div className="d-flex align-items-center gap-2">
+						<h6 className="pi-gallery-card-title mb-0">{item.title}</h6>
+						{verificationLabels.length > 0 ? (
+							<span
+								className="pi-gallery-verified-mark"
+								title={verificationLabels.join(" · ")}
+								aria-label={verificationLabels.join(" · ")}
+							>
+								<i className="ri-verified-badge-fill"></i>
+							</span>
+						) : null}
+					</div>
 					{item.category ? (
 						<Badge className="pi-gallery-pill pi-gallery-pill-muted">
 							{item.category}

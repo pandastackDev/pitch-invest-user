@@ -5,6 +5,8 @@ export type GalleryItem = {
     description?: string;
     imageUrl?: string;
     profileType?: "inventor" | "investor";
+    verifiedIdentity?: boolean;
+    verifiedCompany?: boolean;
     category?: string;
     views?: number;
     availableStatus?: boolean;
