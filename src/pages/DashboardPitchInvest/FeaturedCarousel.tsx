@@ -227,7 +227,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 									<img
 										src={currentUser.avatar}
 										alt={currentUser.name}
-										className="rounded-circle border border-4 carousel-card-border"
+										className="rounded-circle border border-3 carousel-card-border"
 										style={{
 											width: 140,
 											height: 140,
@@ -235,16 +235,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										}}
 									/>
 								</div>
-								<div className="position-absolute top-0 end-0 m-3">
-									<div className="bg-white rounded-circle p-1">
-										<img
-											src={currentUser.companyLogo}
-											alt={currentUser.companyName}
-											className="rounded-circle"
-											style={{ width: 40, height: 40 }}
-										/>
-									</div>
-								</div>
+							
 							</div>
 							<CardBody className="px-4 pb-3 pt-60 pi-left-card-body">
 							    <div className="pi-small-logo ">
@@ -601,7 +592,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 											style={{ top: -56, left: 16, right: 16 }}
 										>
 											<div
-												className="rounded-circle overflow-hidden border border-4 bg-white shadow carousel-card-border"
+												className="rounded-circle overflow-hidden border border-3 bg-white shadow carousel-card-border"
 												style={{ width: 140, height: 140 }}
 											>
 											<img

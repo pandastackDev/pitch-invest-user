@@ -730,7 +730,7 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
       saturate(1)
       brightness(var(--pi-bg-hover-brightness, 0.86))
       contrast(1.06);
-    transform: scale(1.03);
+    // transform: scale(1.03);
   }
 
   &:focus-visible {
@@ -746,6 +746,9 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
   height: 500px;
   border-radius: 0.5rem;
   opacity: 0.6;
+  &:hover {
+    opacity : 0.85;
+  }
 }
 
 .pi-carousel-bg-near {
@@ -762,6 +765,9 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
 
   @media (min-width: 1536px) {
     height: 450px;
+  }
+  &:hover {
+    opacity:  1 ;
   }
 }
 
@@ -1800,15 +1806,15 @@ html:is([data-layout="vertical"], [data-layout="semibox"]):is(
 
 .pi-small-logo {
   position: absolute;
-  top: 10px;            // adjust to taste
-  right: 12px;          // adjust to taste
+  top: 4px;            // adjust to taste
+  right: 4px;          // adjust to taste
   z-index: 5;
   pointer-events: none; // optional: don’t block clicks
 }
 
 .pi-small-logo img {
-  width: 52px;          // ✅ smaller than 50 so it looks “premium”
-  height: 52px;
+  width: 72px;          // ✅ smaller than 50 so it looks “premium”
+  height: 72px;
   object-fit: contain;
   opacity: 0.95;        // optional
 }
