@@ -3,13 +3,16 @@ import { Button, Modal, ModalBody } from "reactstrap";
 import type { GalleryItem } from "../../../types/gallery";
 import mediaLogo from "../../../assets/images/logo-light.png";
 
-type ViewerTab = "photos" | "videos";
+export type ViewerTab = "photos" | "videos";
 
 type Props = {
 	isOpen: boolean;
 	item: GalleryItem | null;
 	onClose: () => void;
 	onClosed?: () => void;
+	activeTab?: ViewerTab;
+	initialPhotoIndex?: number;
+	initialVideoIndex?: number;
 };
 
 const clampIndex = (idx: number, len: number) => {
@@ -31,18 +34,26 @@ const getMedia = (item: GalleryItem | null) => {
 	return { photos, videos };
 };
 
-const GalleryViewerModal: React.FC<Props> = ({ isOpen, item, onClose, onClosed }) => {
+const GalleryViewerModal: React.FC<Props> = ({
+	isOpen,
+	item,
+	onClose,
+	onClosed,
+	activeTab = "photos",
+	initialPhotoIndex = 0,
+	initialVideoIndex = 0,
+}) => {
 	const { photos, videos } = useMemo(() => getMedia(item), [item]);
-	const [tab, setTab] = useState<ViewerTab>("photos");
-	const [photoIndex, setPhotoIndex] = useState(0);
-	const [videoIndex, setVideoIndex] = useState(0);
+	const [tab, setTab] = useState<ViewerTab>(activeTab);
+	const [photoIndex, setPhotoIndex] = useState(initialPhotoIndex);
+	const [videoIndex, setVideoIndex] = useState(initialVideoIndex);
 
 	useEffect(() => {
 		if (!isOpen) return;
-		setTab("photos");
-		setPhotoIndex(0);
-		setVideoIndex(0);
-	}, [isOpen, item?.id]);
+		setTab(activeTab);
+		setPhotoIndex(initialPhotoIndex);
+		setVideoIndex(initialVideoIndex);
+	}, [isOpen, activeTab, initialPhotoIndex, initialVideoIndex]);
 
 	const safePhotoIndex = clampIndex(photoIndex, photos.length);
 	const safeVideoIndex = clampIndex(videoIndex, videos.length);

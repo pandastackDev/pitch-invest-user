@@ -250,6 +250,22 @@ const Gallery: React.FC = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		const savedScroll = sessionStorage.getItem("galleryScrollY");
+		const savedCard = sessionStorage.getItem("galleryActiveCardId");
+		const yPosition = savedScroll ? Number(savedScroll) : null;
+		if (yPosition !== null && !Number.isNaN(yPosition)) {
+			window.scrollTo(0, yPosition);
+			sessionStorage.removeItem("galleryScrollY");
+		}
+		if (savedCard) {
+			const element = document.getElementById(savedCard);
+			element?.focus({ preventScroll: true });
+			sessionStorage.removeItem("galleryActiveCardId");
+		}
+	}, []);
+
 	const stats = [
 		{ value: "500+", label: "ACTIVE PROJECTS" },
 		{ value: "$2.5B+", label: "INVESTED" },

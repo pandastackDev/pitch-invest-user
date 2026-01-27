@@ -158,15 +158,27 @@ export const loginUser =
 	};
 
 export const logoutUser = () => async (dispatch: (action: unknown) => void) => {
+	// Always clear client-side auth markers first so UI updates immediately.
 	try {
 		sessionStorage.removeItem("authUser");
-		
-		// Check if Supabase is configured and sign out
-		const hasSupabase = import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY;
+		localStorage.removeItem("supabase.auth.token");
+		localStorage.removeItem("user");
+	} catch {
+		// ignore storage failures (private mode, disabled storage, etc.)
+	}
+
+	try {
+		// Check if Supabase is configured and sign out (best-effort).
+		const hasSupabase =
+			import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY;
 		if (hasSupabase) {
-			await supabase.auth.signOut({ scope: "local" });
+			try {
+				await supabase.auth.signOut({ scope: "local" });
+			} catch {
+				// ignore sign out failures; we already cleared local session markers
+			}
 		}
-		
+
 		const fireBaseBackend = getFirebaseBackend();
 		if (import.meta.env.VITE_APP_DEFAULTAUTH === "firebase") {
 			const response = fireBaseBackend.logout;
@@ -175,6 +187,8 @@ export const logoutUser = () => async (dispatch: (action: unknown) => void) => {
 			dispatch(logoutUserSuccess(true));
 		}
 	} catch (error) {
+		// Even if sign-out APIs fail, treat the user as logged out locally.
+		dispatch(logoutUserSuccess(true));
 		dispatch(apiError(error));
 	}
 };

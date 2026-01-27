@@ -1,35 +1,155 @@
-const withQuery = (url: string, query: string) =>
-	url.includes("?") ? `${url}&${query}` : `${url}?${query}`;
+const createPhotoSet = (startId: number) =>
+	Array.from({ length: 8 }, (_, idx) => {
+		const id = startId + idx;
+		return `https://picsum.photos/id/${id}/1600/900?auto=format&fit=crop&w=1200&q=80`;
+	});
 
-const SAMPLE_VIDEO_SRC =
-	"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
-
-const buildMedia = (baseImageUrl: string) => {
-	const photos = Array.from({ length: 8 }, (_, idx) =>
-		withQuery(baseImageUrl, `v=${idx + 1}`),
-	);
-	const videos = Array.from({ length: 3 }, (_, idx) => ({
-		id: `video-${idx + 1}`,
-		type: "video" as const,
-		src: SAMPLE_VIDEO_SRC,
-		thumb: withQuery(baseImageUrl, `videoThumb=${idx + 1}`),
-		caption: `Video ${idx + 1}`,
-	}));
-
-	return { photos, videos };
+type VideoLibraryItem = {
+	id: string;
+	title: string;
+	src: string;
+	thumb: string;
 };
 
-export const galleryItems = [
+const videoLibrary: VideoLibraryItem[] = [
+	{
+		id: "BigBuckBunny",
+		title: "Big Buck Bunny",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+	},
+	{
+		id: "ElephantsDream",
+		title: "Elephant's Dream",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
+	},
+	{
+		id: "ForBiggerBlazes",
+		title: "For Bigger Blazes",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
+	},
+	{
+		id: "ForBiggerEscapes",
+		title: "For Bigger Escapes",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg",
+	},
+	{
+		id: "ForBiggerFun",
+		title: "For Bigger Fun",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg",
+	},
+	{
+		id: "ForBiggerJoyrides",
+		title: "For Bigger Joyrides",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
+	},
+	{
+		id: "ForBiggerMeltdowns",
+		title: "For Bigger Meltdowns",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
+	},
+	{
+		id: "Sintel",
+		title: "Sintel",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+		thumb: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
+	},
+	{
+		id: "SubaruOutbackOnStreetAndDirt",
+		title: "Subaru Outback",
+		src:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/SubaruOutbackOnStreetAndDirt.jpg",
+	},
+	{
+		id: "TearsOfSteel",
+		title: "Tears of Steel",
+		src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
+	},
+	{
+		id: "VolkswagenGTIReview",
+		title: "Volkswagen GTI Review",
+		src:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg",
+	},
+	{
+		id: "WeAreGoingOnBullrun",
+		title: "We Are Going On Bullrun",
+		src:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WeAreGoingOnBullrun.jpg",
+	},
+	{
+		id: "WhatCarCanYouGetForAGrand",
+		title: "What Car Can You Get for a Grand",
+		src:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+		thumb:
+			"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WhatCarCanYouGetForAGrand.jpg",
+	},
+];
+
+const videoCombos = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[9, 10, 11],
+	[12, 0, 3],
+	[4, 7, 10],
+	[11, 2, 5],
+	[6, 9, 12],
+	[1, 4, 8],
+	[0, 5, 9],
+	[2, 7, 11],
+	[3, 6, 10],
+];
+
+const photoStartOffsets = [11, 23, 35, 47, 59, 71, 83, 95, 107, 119, 131, 143];
+
+const galleryMediaSets = photoStartOffsets.map((start, galleryIndex) => ({
+	photos: createPhotoSet(start),
+	videos: videoCombos[galleryIndex].map((videoIndex) => {
+		const base = videoLibrary[videoIndex];
+		return {
+			...base,
+			id: `${base.id}-${galleryIndex + 1}`,
+			caption: `${base.title} • Gallery ${galleryIndex + 1}`,
+		};
+	}),
+}));
+
+const cloneMedia = (index: number) => {
+	const source = galleryMediaSets[index];
+	return {
+		photos: [...source.photos],
+		videos: source.videos.map((video) => ({ ...video })),
+	};
+};
+
+const baseGalleryInfo = [
 	{
 		id: 1,
 		title: "Aero-Cityscape",
 		artist: "A. Turing",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp?v=2",
-		],
 		category: "Steampunk",
 		views: 15420,
 		availableStatus: true,
@@ -49,20 +169,11 @@ export const galleryItems = [
 		profileType: "inventor",
 		verifiedIdentity: true,
 		verifiedCompany: true,
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp",
-		),
 	},
 	{
 		id: 2,
 		title: "Robo-Creator",
 		artist: "E. Lovelace",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp?v=2",
-		],
 		category: "Steampunk",
 		views: 15420,
 		availableStatus: true,
@@ -81,21 +192,12 @@ export const galleryItems = [
 		description: "AI-driven generative robotics artwork",
 		profileType: "inventor",
 		verifiedIdentity: true,
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp",
-		),
 	},
 	{
 		id: 3,
 		title: "Chromno-Suit",
 		artist: "E. Lovelace",
 		subtitle: "Speaking at a Distance",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512826183_75e98cd9.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512826183_75e98cd9.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512826183_75e98cd9.webp?v=2",
-		],
 		category: "Steampunk",
 		views: 15420,
 		availableStatus: false,
@@ -113,21 +215,12 @@ export const galleryItems = [
 		location: "United Kingdom",
 		description: "Wearable tech concept suit with chromatic panels",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512826183_75e98cd9.webp",
-		),
 	},
 	{
 		id: 4,
 		title: "Chono-Suit",
 		artist: "J. Verne",
 		subtitle: "The Electronic Brain",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp?v=2",
-		],
 		category: "Technology",
 		views: 15420,
 		availableStatus: false,
@@ -146,20 +239,11 @@ export const galleryItems = [
 		description: "Speculative computing device inspired by classic sci-fi",
 		profileType: "inventor",
 		verifiedCompany: true,
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp",
-		),
 	},
 	{
 		id: 5,
 		title: "Infinite Connection",
 		artist: "A. Turing",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828031_b89981ce.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828031_b89981ce.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828031_b89981ce.webp?v=2",
-		],
 		category: "Technology",
 		views: 15420,
 		availableStatus: false,
@@ -177,20 +261,11 @@ export const galleryItems = [
 		location: "United States",
 		description: "Networked art exploring connectivity",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828031_b89981ce.webp",
-		),
 	},
 	{
 		id: 6,
 		title: "The Steam Machine",
 		artist: "Force of the Revolution",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828949_a571c5a4.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828949_a571c5a4.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828949_a571c5a4.webp?v=2",
-		],
 		category: "Steampunk",
 		views: 15420,
 		availableStatus: false,
@@ -208,20 +283,11 @@ export const galleryItems = [
 		location: "Brazil",
 		description: "Industrial era inspired mechanical sculpture",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828949_a571c5a4.webp",
-		),
 	},
 	{
 		id: 7,
 		title: "Human Flight",
 		artist: "Santos Dumont",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512829839_39eb7149.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512829839_39eb7149.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512829839_39eb7149.webp?v=2",
-		],
 		category: "Aviation",
 		views: 15420,
 		availableStatus: false,
@@ -239,21 +305,12 @@ export const galleryItems = [
 		location: "Brazil",
 		description: "Homage to early aviation pioneers",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512829839_39eb7149.webp",
-		),
 	},
 	{
 		id: 8,
 		title: "Human Flight",
 		artist: "Conquest of the Skies",
 		subtitle: "Wheels that Change the World",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512830773_b71fdf9f.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512830773_b71fdf9f.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512830773_b71fdf9f.webp?v=2",
-		],
 		category: "Steampunk",
 		views: 15420,
 		availableStatus: false,
@@ -271,20 +328,11 @@ export const galleryItems = [
 		location: "Brazil",
 		description: "Vehicles that reimagine transportation",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512830773_b71fdf9f.webp",
-		),
 	},
 	{
 		id: 9,
 		title: "Capture of Reality",
 		artist: "Camera Obscura",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512831718_f62bc54a.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512831718_f62bc54a.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512831718_f62bc54a.webp?v=2",
-		],
 		category: "Technology",
 		views: 15420,
 		availableStatus: false,
@@ -302,20 +350,11 @@ export const galleryItems = [
 		location: "Portugal",
 		description: "Photography inspired modern piece",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512831718_f62bc54a.webp",
-		),
 	},
 	{
 		id: 10,
 		title: "The Counted Time",
 		artist: "The Clock Returns",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512841276_2336a6c0.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512841276_2336a6c0.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512841276_2336a6c0.webp?v=2",
-		],
 		category: "Time Pieces",
 		views: 15420,
 		availableStatus: false,
@@ -333,20 +372,11 @@ export const galleryItems = [
 		location: "Portugal",
 		description: "Contemporary clockwork sculpture",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512841276_2336a6c0.webp",
-		),
 	},
 	{
 		id: 11,
 		title: "The Counted Time",
 		artist: "The Mechanical Clock",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512842275_28aadfb8.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512842275_28aadfb8.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512842275_28aadfb8.webp?v=2",
-		],
 		category: "Time Pieces",
 		views: 15420,
 		availableStatus: false,
@@ -364,20 +394,11 @@ export const galleryItems = [
 		location: "Portugal",
 		description: "Mechanical timepiece with layered gears",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512842275_28aadfb8.webp",
-		),
 	},
 	{
 		id: 12,
 		title: "Eyes on the Universe",
 		artist: "The Telescope",
-		imageUrl:
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512843188_397c6bf6.webp",
-		images: [
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512843188_397c6bf6.webp?v=1",
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512843188_397c6bf6.webp?v=2",
-		],
 		category: "Technology",
 		views: 18340,
 		availableStatus: false,
@@ -395,10 +416,17 @@ export const galleryItems = [
 		location: "Portugal",
 		description: "Large scale observational artwork",
 		profileType: "inventor",
-		media: buildMedia(
-			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512843188_397c6bf6.webp",
-		),
 	},
 ];
+
+export const galleryItems = baseGalleryInfo.map((item, idx) => {
+	const media = cloneMedia(idx);
+	return {
+		...item,
+		imageUrl: media.photos[0],
+		images: media.photos.slice(0, 3),
+		media,
+	};
+});
 
 export default galleryItems;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Badge, Button, Card, CardBody } from "reactstrap";
 import type { GalleryItem } from "../../../types/gallery";
 import mediaLogo from "../../../assets/images/logo-light.png";
@@ -23,7 +23,8 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 }) => {
 	const idStr = String(item.id);
 	const likes = item.likes ?? 0;
-	const infoHref = `/apps-projects-overview?projectId=${encodeURIComponent(idStr)}`;
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const photoA =
 		item.media?.photos?.[0] ?? item.imageUrl ?? "/assets/default-cover.png";
@@ -203,11 +204,22 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 					</div>
 
 					<Button
-						tag={Link}
-						to={infoHref}
+						type="button"
 						color="primary"
 						className="pi-gallery-info-btn"
-						onClick={(e) => e.stopPropagation()}
+						onClick={(e) => {
+							e.stopPropagation();
+							const returnUrl = `${location.pathname}${location.search}`;
+							if (typeof window !== "undefined") {
+								sessionStorage.setItem("galleryScrollY", String(window.scrollY));
+								sessionStorage.setItem("galleryActiveCardId", `pi-gallery-card-${idStr}`);
+							}
+							navigate(
+								`/gallery/${encodeURIComponent(
+									idStr,
+								)}?from=gallery&return=${encodeURIComponent(returnUrl)}`,
+							);
+						}}
 					>
 						Information
 					</Button>

@@ -12,6 +12,7 @@ import NotificationDropdown from "../Components/Common/NotificationDropdown";
 import ProfileDropdown from "../Components/Common/ProfileDropdown";
 //import Components
 import SearchOption from "../Components/Common/SearchOption";
+import { useAuth } from "../hooks/useAuth";
 import { changeSidebarVisibility } from "../slices/thunks";
 
 interface HeaderProps {
@@ -20,6 +21,7 @@ interface HeaderProps {
 
 const Header = ({ headerClass }: HeaderProps) => {
 	const dispatch = useDispatch();
+	const { user, loading: authLoading } = useAuth();
 
 	const selectDashboardData = createSelector(
 		(state) => state.Layout,
@@ -27,6 +29,8 @@ const Header = ({ headerClass }: HeaderProps) => {
 	);
 	// Inside your component
 	const sidebarVisibilitytype = useSelector(selectDashboardData);
+	// Subscribe to auth slice so header reacts immediately to login/logout.
+	const reduxLoginUser = useSelector((state: any) => state?.Login?.user);
 
 	const [search, setSearch] = useState(false);
 	const toogleSearch = () => {
@@ -76,6 +80,29 @@ const Header = ({ headerClass }: HeaderProps) => {
 				: document.body.classList.add("twocolumn-panel");
 		}
 	};
+
+	const isAuthenticated = (() => {
+		if (user) return true;
+
+		const hasReduxToken =
+			reduxLoginUser &&
+			typeof reduxLoginUser === "object" &&
+			!!(reduxLoginUser.token || reduxLoginUser.accessToken);
+		if (hasReduxToken) return true;
+
+		if (typeof window === "undefined") return false;
+
+		// sessionStorage auth (jwt/fake/firebase flows in this codebase)
+		const rawAuthUser = sessionStorage.getItem("authUser");
+		if (!rawAuthUser || rawAuthUser === "null" || rawAuthUser === "{}") return false;
+
+		try {
+			const parsed = JSON.parse(rawAuthUser) as { token?: string; accessToken?: string };
+			return !!(parsed?.token || parsed?.accessToken);
+		} catch {
+			return false;
+		}
+	})();
 
 	return (
 		<header id="page-topbar" className={headerClass}>
@@ -153,11 +180,40 @@ const Header = ({ headerClass }: HeaderProps) => {
 						{/* LanguageDropdown */}
 						<LanguageDropdown />
 
-						{/* NotificationDropdown */}
-						<NotificationDropdown />
+						{isAuthenticated ? (
+							<>
+								{/* NotificationDropdown */}
+								<NotificationDropdown />
 
-						{/* ProfileDropdown */}
-						<ProfileDropdown />
+								{/* ProfileDropdown */}
+								<ProfileDropdown />
+							</>
+						) : authLoading ? null : (
+							<div className="d-flex align-items-center gap-2 ms-2">
+								<Link
+									to="/login"
+									className="btn btn-sm rounded-pill px-3"
+									style={{
+										backgroundColor: "#0a3d5c",
+										borderColor: "#0a3d5c",
+										color: "#fff",
+									}}
+								>
+									Login
+								</Link>
+								<Link
+									to="/register"
+									className="btn btn-sm rounded-pill px-3"
+									style={{
+										backgroundColor: "#0a3d5c",
+										borderColor: "#0a3d5c",
+										color: "#fff",
+									}}
+								>
+									Signup
+								</Link>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
