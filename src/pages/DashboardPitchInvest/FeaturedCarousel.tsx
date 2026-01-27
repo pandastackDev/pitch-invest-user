@@ -262,7 +262,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										</span>
 									</div>
 								</div>
-								<div className="d-flex gap-2 mb-3">
+								<div className="d-flex gap-2 mb-3 pi-right-card-cta">
 									<button
 										type="button"
 										className="flex-fill  rounded-pill fw-semibold pi-left-btn-message"
@@ -278,7 +278,7 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 											navigate(`/auction/${currentUser.id}`);
 										}}
 									>
-										Auction
+										Offer
 									</button>
 								</div>
 								<div className="text-center mb-3">
@@ -638,10 +638,10 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 											</div>
 										</div>
 									<div style={{ paddingTop: 138 }}>
-										<div className="d-flex justify-content-center mb-2 gap-3">
+										<div className="d-flex justify-content-center mb-2 gap-2 pi-right-card-cta">
 											<button
 												type="button"
-												className="flex-fill  rounded-pill fw-semibold pi-left-btn-message"
+												className="flex-fill  rounded-pill fw-semibold pi-left-btn-message border-2"
 											onClick={(e) => e.stopPropagation()}
 										>
 											Message

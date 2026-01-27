@@ -710,6 +710,29 @@ html[data-sidebar-size="lg"] .pi-carousel-side-card-right {
   }
 }
 
+.pi-left-product-media {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.pi-left-product-video-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+
+  i {
+    font-size: 2.25rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  }
+}
+
 .pi-carousel-img-frame {
   border: 8px solid #0a3d5c;
   padding: 8px;
@@ -1817,4 +1840,19 @@ html:is([data-layout="vertical"], [data-layout="semibox"]):is(
   height: 72px;
   object-fit: contain;
   opacity: 0.95;        // optional
+}
+
+
+
+.pi-right-card-cta {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pi-right-card-cta > button {
+  flex: 1 1 0%;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
