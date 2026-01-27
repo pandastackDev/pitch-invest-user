@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import {
-	Badge,
 	Button,
 	Card,
 	CardBody,
@@ -11,20 +11,30 @@ import {
 	Row,
 } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
-import CountUp from "react-countup";
-import { useNavigate } from "react-router-dom";
+import type { GalleryItem } from "../../types/gallery";
 import { galleryItems } from "./galleryData";
 import GalleryGrid from "./components/GalleryGrid";
-import AdSlot from "./components/AdSlot";
+import GalleryViewerModal from "./components/GalleryViewerModal";
 
 const Gallery: React.FC = () => {
 	const navigate = useNavigate();
+	const lastViewerReturn = useRef<{ scrollY: number; cardId: string } | null>(
+		null,
+	);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All Status");
 	const [selectedCountry, setSelectedCountry] = useState("All Countries");
 	const [selectedCategory, setSelectedCategory] = useState("All Categories");
 	const [selectedCity, setSelectedCity] = useState("All Cities");
 	const [selectedTag, setSelectedTag] = useState("All Tags");
+	const [likedById, setLikedById] = useState<Record<string, boolean>>({});
+	const [likesById, setLikesById] = useState<Record<string, number>>(() => {
+		return Object.fromEntries(
+			galleryItems.map((item) => [String(item.id), item.likes ?? 0]),
+		);
+	});
+	const [viewerOpen, setViewerOpen] = useState(false);
+	const [viewerItem, setViewerItem] = useState<GalleryItem | null>(null);
 
 	// Extract unique values for filters
 	const statuses = useMemo(() => {
@@ -89,6 +99,10 @@ const Gallery: React.FC = () => {
 	// Filter gallery items
 	const filteredItems = useMemo(() => {
 		return galleryItems.filter((item) => {
+			if ((item.profileType ?? "inventor") !== "inventor") {
+				return false;
+			}
+
 			const matchesSearch =
 				searchTerm === "" ||
 				item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -135,6 +149,16 @@ const Gallery: React.FC = () => {
 		selectedTag,
 	]);
 
+	const displayItems = useMemo(() => {
+		return filteredItems.map((item) => {
+			const idStr = String(item.id);
+			return {
+				...item,
+				likes: likesById[idStr] ?? item.likes ?? 0,
+			};
+		});
+	}, [filteredItems, likesById]);
+
 	const resetFilters = () => {
 		setSearchTerm("");
 		setSelectedStatus("All Status");
@@ -142,6 +166,75 @@ const Gallery: React.FC = () => {
 		setSelectedCategory("All Categories");
 		setSelectedCity("All Cities");
 		setSelectedTag("All Tags");
+	};
+
+	const handleToggleLike = (id: string) => {
+		setLikedById((prev) => {
+			const nextLiked = !prev[id];
+			setLikesById((prevLikes) => {
+				const current = prevLikes[id] ?? 0;
+				const next = Math.max(0, current + (nextLiked ? 1 : -1));
+				return { ...prevLikes, [id]: next };
+			});
+			toast(nextLiked ? "Liked project" : "Unliked project", {
+				position: "top-right",
+				hideProgressBar: false,
+				className: "bg-success text-white",
+			});
+			return { ...prev, [id]: nextLiked };
+		});
+	};
+
+	const handleMessage = (id: string) => {
+		navigate(`/apps-chat?projectId=${encodeURIComponent(id)}`);
+	};
+
+	const handleShare = async (id: string) => {
+		const url = `${window.location.origin}/gallery/${encodeURIComponent(id)}`;
+		try {
+			const navAny = navigator as unknown as { share?: (d: unknown) => Promise<void> };
+			if (typeof navAny.share === "function") {
+				await navAny.share({ url });
+				return;
+			}
+		} catch {
+			// fallthrough to clipboard
+		}
+
+		try {
+			await navigator.clipboard.writeText(url);
+			toast("Link copied to clipboard", {
+				position: "top-right",
+				hideProgressBar: false,
+				className: "bg-info text-white",
+			});
+		} catch {
+			window.prompt("Copy this link:", url);
+		}
+	};
+
+	const handleOpenViewer = (item: GalleryItem) => {
+		lastViewerReturn.current = {
+			scrollY: window.scrollY,
+			cardId: `pi-gallery-card-${String(item.id)}`,
+		};
+		setViewerItem(item);
+		setViewerOpen(true);
+	};
+
+	const handleCloseViewer = () => {
+		setViewerOpen(false);
+	};
+
+	const handleViewerClosed = () => {
+		const state = lastViewerReturn.current;
+		lastViewerReturn.current = null;
+		setViewerItem(null);
+		if (!state) return;
+
+		window.scrollTo(0, state.scrollY);
+		const el = document.getElementById(state.cardId);
+		el?.focus({ preventScroll: true });
 	};
 
 	// Show sign-in success toast after redirect
@@ -157,116 +250,51 @@ const Gallery: React.FC = () => {
 		}
 	}, []);
 
-	// Calculate stats
-	const stats = useMemo(() => {
-		const activeProjects = galleryItems.filter(
-			(item) => item.availableStatus,
-		).length;
-		const totalProjects = galleryItems.length;
-		const totalViews = galleryItems.reduce(
-			(sum, item) => sum + (item.views || 0),
-			0,
-		);
-		const totalLikes = galleryItems.reduce(
-			(sum, item) => sum + (item.likes || 0),
-			0,
-		);
-
-		return [
-			{
-				label: "ACTIVE PROJECTS",
-				value: activeProjects,
-				icon: "ri-folder-open-line",
-				iconClass: "primary",
-			},
-			{
-				label: "TOTAL VIEWS",
-				value: totalViews,
-				icon: "ri-eye-line",
-				iconClass: "info",
-			},
-			{
-				label: "TOTAL PROJECTS",
-				value: totalProjects,
-				icon: "ri-stack-line",
-				iconClass: "success",
-			},
-			{
-				label: "TOTAL LIKES",
-				value: totalLikes,
-				icon: "ri-heart-line",
-				iconClass: "danger",
-			},
-		];
-	}, []);
+	const stats = [
+		{ value: "500+", label: "ACTIVE PROJECTS" },
+		{ value: "$2.5B+", label: "INVESTED" },
+		{ value: "1,200+", label: "INVENTORS" },
+		{ value: "95%", label: "SUCCESS RATE" },
+	] as const;
 
 	document.title = "Gallery | Velzon - React Admin & Dashboard Template";
 
 	return (
 		<div className="page-content pitch-invest-dashboard">
 			<ToastContainer closeButton={false} limit={1} />
-			<Container fluid style={{ paddingBottom: 120 }}>
-				{/* Stats Section */}
-				<Row className="g-3 mb-4">
-					{stats.map((stat) => (
-						<Col xxl={3} sm={6} key={stat.label}>
-							<Card className="card-animate">
-								<CardBody>
-									<div className="d-flex justify-content-between">
-										<div>
-											<p className="fw-medium text-muted mb-0 text-uppercase fs-12">
-												{stat.label}
-											</p>
-											<h2 className="mt-4 ff-secondary fw-semibold">
-												<span className="counter-value">
-													<CountUp
-														start={0}
-														end={stat.value}
-														suffix="+"
-														duration={3}
-													/>
-												</span>
-											</h2>
-										</div>
-										<div>
-											<div className="avatar-sm flex-shrink-0">
-												<span
-													className={
-														"avatar-title rounded-circle fs-4 bg-" +
-														stat.iconClass +
-														"-subtle text-" +
-														stat.iconClass
-													}
-												>
-													<i className={stat.icon}></i>
-												</span>
-											</div>
-										</div>
-									</div>
-								</CardBody>
-							</Card>
-						</Col>
-					))}
-				</Row>
-
-				{/* Section Header */}
-				<div className="investment-opportunities">
-					<div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-						<div>
-							<h4 className="mb-1 section-title">
-								<i className="ri-image-line me-2"></i>
-								Gallery
-							</h4>
-							<p className="text-muted mb-0 section-subtitle">
-								Discover revolutionary innovations and groundbreaking projects
-							</p>
-						</div>
-						<Badge className="startup-count-badge">
-							{filteredItems.length} Items
-						</Badge>
+			<Container fluid className="pi-gallery-page">
+				{/* Hero */}
+				<section className="pi-gallery-hero">
+					<div className="pi-gallery-hero-inner">
+						<h2 className="pi-gallery-hero-title">
+							<span className="pi-gallery-hero-title-primary">
+								Discover{" "}
+							</span>
+							<span className="pi-gallery-hero-title-accent">
+								Revolutionary Innovations
+							</span>
+						</h2>
+						<p className="pi-gallery-hero-subtitle">
+							Connect with brilliant inventors and invest in groundbreaking
+							technologies that are shaping the future. From medical
+							breakthroughs to sustainable energy solutions.
+						</p>
 					</div>
 
-					{/* Filter Bar */}
+					<Row className="g-3 g-md-4 justify-content-center pi-gallery-stats">
+						{stats.map((stat) => (
+							<Col key={stat.label} xs={6} md={3} xl={3}>
+								<div className="pi-gallery-stat-card">
+									<div className="pi-gallery-stat-value">{stat.value}</div>
+									<div className="pi-gallery-stat-label">{stat.label}</div>
+								</div>
+							</Col>
+						))}
+					</Row>
+				</section>
+
+				<div className="pi-gallery-content">
+					{/* Filter Bar (kept as-is) */}
 					<Card className="border-0 mb-3 mb-md-4 filter-card">
 						<CardBody className="py-2 py-md-3 px-2 px-md-3">
 							{/* Desktop Layout: Single row with flex */}
@@ -351,7 +379,7 @@ const Gallery: React.FC = () => {
 								<Button
 									outline
 									color="secondary"
-									className="btn-reset"
+									className="btn-reset rounded-pill"
 									onClick={resetFilters}
 								>
 									<i className="ri-refresh-line me-1"></i>Reset
@@ -465,21 +493,41 @@ const Gallery: React.FC = () => {
 						</CardBody>
 					</Card>
 
-					{/* Top Ad */}
-					<AdSlot position="top" />
-
-					{/* Gallery Cards Grid (uses simplified Velzon-style cards) */}
-					<GalleryGrid items={filteredItems as any} />
-
-					{filteredItems.length === 0 && (
-						<div className="text-center py-5 empty-state">
-							<i className="ri-search-eye-line"></i>
-							<h5 className="mt-3 text-muted">No items found</h5>
-							<p className="text-muted">Try adjusting your filters</p>
+					{/* Gallery cards/grid */}
+					{displayItems.length > 0 ? (
+						<GalleryGrid
+							items={displayItems}
+							likedById={likedById}
+							onToggleLike={handleToggleLike}
+							onMessage={handleMessage}
+							onShare={handleShare}
+							onOpenViewer={handleOpenViewer}
+						/>
+					) : (
+						<div className="pi-gallery-empty">
+							<div className="pi-gallery-empty-title">No projects found</div>
+							<div className="pi-gallery-empty-subtitle text-muted">
+								Try adjusting filters or resetting your search.
+							</div>
+							<Button
+								type="button"
+								color="primary"
+								className="rounded-pill px-4"
+								onClick={resetFilters}
+							>
+								Reset filters
+							</Button>
 						</div>
 					)}
 				</div>
 			</Container>
+
+			<GalleryViewerModal
+				isOpen={viewerOpen}
+				item={viewerItem}
+				onClose={handleCloseViewer}
+				onClosed={handleViewerClosed}
+			/>
 		</div>
 	);
 };

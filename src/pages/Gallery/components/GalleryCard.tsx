@@ -1,53 +1,181 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "reactstrap";
+import { Badge, Button, Card, CardBody } from "reactstrap";
 import type { GalleryItem } from "../../../types/gallery";
+import brandIcon from "../../../assets/images/main-logo/small-logo.png";
 
-const truncate = (s = "", n = 60) => (s.length > n ? s.slice(0, n) + "…" : s);
+type GalleryCardProps = {
+	item: GalleryItem;
+	liked?: boolean;
+	onToggleLike?: (id: string) => void;
+	onShare?: (id: string) => void;
+	onMessage?: (id: string) => void;
+	onOpenViewer?: (item: GalleryItem) => void;
+};
 
-const GalleryCard: React.FC<{ item: GalleryItem }> = ({ item }) => {
-  const short = truncate(item.description || "", 60);
-  const idStr = String(item.id);
-  return (
-    <article className="card h-100">
-      <Link to={`/gallery/${idStr}`} className="d-block">
-        <img
-          src={item.imageUrl ?? "/assets/default-cover.png"}
-          alt={item.title}
-          className="card-img-top img-fluid"
-          style={{ objectFit: "cover", height: 180 }}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/placeholder.svg";
-          }}
-        />
-      </Link>
-      <div className="card-body d-flex flex-column">
-        <h6 className="card-title mb-1">{item.title}</h6>
-        <p className="text-muted small mb-3">{short}</p>
+const GalleryCard: React.FC<GalleryCardProps> = ({
+	item,
+	liked = false,
+	onToggleLike,
+	onShare,
+	onMessage,
+	onOpenViewer,
+}) => {
+	const idStr = String(item.id);
+	const likes = item.likes ?? 0;
+	const infoHref = `/apps-projects-overview?projectId=${encodeURIComponent(idStr)}`;
 
-        <div className="d-flex justify-content-between align-items-center mt-auto">
-          <div className="btn-group" role="group" aria-label="card actions">
-            <Button color="light" outline size="sm" aria-label="Like" className="me-1">
-              <i className="ri-heart-line"></i>
-            </Button>
-            <Button color="light" outline size="sm" aria-label="Share">
-              <i className="ri-share-line"></i>
-            </Button>
-          </div>
-          <Button
-            tag={Link}
-            to={`/gallery/${idStr}`}
-            color="primary"
-            size="sm"
-            className="rounded-pill px-3"
-            aria-label="Info"
-          >
-            Info
-          </Button>
-        </div>
-      </div>
-    </article>
-  );
+	const photoA =
+		item.media?.photos?.[0] ?? item.imageUrl ?? "/assets/default-cover.png";
+	const photoB = item.media?.photos?.[1] ?? photoA;
+	const videoThumb = item.media?.videos?.[0]?.thumb ?? photoA;
+
+	const openViewer = () => onOpenViewer?.(item);
+
+	return (
+		<Card
+			id={`pi-gallery-card-${idStr}`}
+			className="pi-gallery-card h-100"
+			role="button"
+			tabIndex={0}
+			onClick={openViewer}
+			onKeyDown={(e) => {
+				if (e.target !== e.currentTarget) return;
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					openViewer();
+				}
+			}}
+		>
+			<div className="pi-gallery-card-media">
+				<div className="pi-gallery-media-grid">
+					<div className="pi-gallery-media-tile pi-gallery-media-tile-main">
+						<img
+							src={photoA}
+							alt={item.title}
+							onError={(e) => {
+								(e.target as HTMLImageElement).src = "/placeholder.svg";
+							}}
+						/>
+					</div>
+
+					<div className="pi-gallery-media-col">
+						<div className="pi-gallery-media-tile">
+							<img
+								src={photoB}
+								alt={item.title}
+								onError={(e) => {
+									(e.target as HTMLImageElement).src = "/placeholder.svg";
+								}}
+							/>
+						</div>
+						<div className="pi-gallery-media-tile pi-gallery-media-video">
+							<img
+								src={videoThumb}
+								alt={`${item.title} - video`}
+								onError={(e) => {
+									(e.target as HTMLImageElement).src = "/placeholder.svg";
+								}}
+							/>
+							<div className="pi-gallery-media-play" aria-hidden="true">
+								<i className="ri-play-fill"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<img
+					src={brandIcon}
+					alt=""
+					aria-hidden="true"
+					className="pi-gallery-card-brand"
+				/>
+
+				<div className="pi-gallery-card-media-meta">
+					<Badge className="pi-gallery-pill">8 Photos</Badge>
+					<Badge className="pi-gallery-pill">3 Videos</Badge>
+				</div>
+			</div>
+
+			<CardBody className="d-flex flex-column">
+				<div className="d-flex align-items-start justify-content-between gap-2 mb-2">
+					<h6 className="pi-gallery-card-title mb-0">{item.title}</h6>
+					{item.category ? (
+						<Badge className="pi-gallery-pill pi-gallery-pill-muted">
+							{item.category}
+						</Badge>
+					) : null}
+				</div>
+
+				<p className="pi-gallery-card-desc text-muted mb-3">
+					{item.description || "-"}
+				</p>
+
+				<div className="mt-auto d-flex align-items-center justify-content-between gap-2">
+					<div
+						className="d-inline-flex align-items-center gap-1"
+						role="group"
+						aria-label="project actions"
+					>
+						<Button
+							type="button"
+							color="light"
+							size="sm"
+							className={`pi-gallery-action-btn pi-gallery-action-like${liked ? " is-liked" : ""}`}
+							aria-label={liked ? "Unlike" : "Like"}
+							onClick={(e) => {
+								e.stopPropagation();
+								onToggleLike?.(idStr);
+							}}
+						>
+							<i
+								className={`pi-gallery-action-icon ${liked ? "ri-heart-fill" : "ri-heart-line"}`}
+							></i>
+							<span className="ms-1 pi-gallery-like-count">{likes}</span>
+						</Button>
+
+						<Button
+							type="button"
+							color="light"
+							size="sm"
+							className="pi-gallery-action-btn pi-gallery-action-message"
+							aria-label="Message"
+							onClick={(e) => {
+								e.stopPropagation();
+								onMessage?.(idStr);
+							}}
+						>
+							<i className="pi-gallery-action-icon ri-message-2-line"></i>
+						</Button>
+
+						<Button
+							type="button"
+							color="light"
+							size="sm"
+							className="pi-gallery-action-btn pi-gallery-action-share"
+							aria-label="Share"
+							onClick={(e) => {
+								e.stopPropagation();
+								onShare?.(idStr);
+							}}
+						>
+							<i className="pi-gallery-action-icon ri-share-line"></i>
+						</Button>
+					</div>
+
+					<Button
+						tag={Link}
+						to={infoHref}
+						color="primary"
+						className="pi-gallery-info-btn"
+						onClick={(e) => e.stopPropagation()}
+					>
+						Information
+					</Button>
+				</div>
+			</CardBody>
+		</Card>
+	);
 };
 
 export default GalleryCard;

@@ -1,3 +1,24 @@
+const withQuery = (url: string, query: string) =>
+	url.includes("?") ? `${url}&${query}` : `${url}?${query}`;
+
+const SAMPLE_VIDEO_SRC =
+	"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+
+const buildMedia = (baseImageUrl: string) => {
+	const photos = Array.from({ length: 8 }, (_, idx) =>
+		withQuery(baseImageUrl, `v=${idx + 1}`),
+	);
+	const videos = Array.from({ length: 3 }, (_, idx) => ({
+		id: `video-${idx + 1}`,
+		type: "video" as const,
+		src: SAMPLE_VIDEO_SRC,
+		thumb: withQuery(baseImageUrl, `videoThumb=${idx + 1}`),
+		caption: `Video ${idx + 1}`,
+	}));
+
+	return { photos, videos };
+};
+
 export const galleryItems = [
 	{
 		id: 1,
@@ -25,6 +46,10 @@ export const galleryItems = [
 		date: "Oct 24",
 		location: "United States",
 		description: "Biodegradable algae-based plastic alternative",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512824243_be4f91e1.webp",
+		),
 	},
 	{
 		id: 2,
@@ -52,6 +77,10 @@ export const galleryItems = [
 		date: "Sep 12",
 		location: "United Kingdom",
 		description: "AI-driven generative robotics artwork",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512825227_39d14657.webp",
+		),
 	},
 	{
 		id: 3,
@@ -80,6 +109,10 @@ export const galleryItems = [
 		date: "Aug 30",
 		location: "United Kingdom",
 		description: "Wearable tech concept suit with chromatic panels",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512826183_75e98cd9.webp",
+		),
 	},
 	{
 		id: 4,
@@ -108,6 +141,10 @@ export const galleryItems = [
 		date: "Jul 14",
 		location: "France",
 		description: "Speculative computing device inspired by classic sci-fi",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512827095_567e2ddf.webp",
+		),
 	},
 	{
 		id: 5,
@@ -135,6 +172,10 @@ export const galleryItems = [
 		date: "Jun 21",
 		location: "United States",
 		description: "Networked art exploring connectivity",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828031_b89981ce.webp",
+		),
 	},
 	{
 		id: 6,
@@ -162,6 +203,10 @@ export const galleryItems = [
 		date: "May 10",
 		location: "Brazil",
 		description: "Industrial era inspired mechanical sculpture",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512828949_a571c5a4.webp",
+		),
 	},
 	{
 		id: 7,
@@ -189,6 +234,10 @@ export const galleryItems = [
 		date: "Mar 3",
 		location: "Brazil",
 		description: "Homage to early aviation pioneers",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512829839_39eb7149.webp",
+		),
 	},
 	{
 		id: 8,
@@ -217,6 +266,10 @@ export const galleryItems = [
 		date: "Feb 18",
 		location: "Brazil",
 		description: "Vehicles that reimagine transportation",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512830773_b71fdf9f.webp",
+		),
 	},
 	{
 		id: 9,
@@ -244,6 +297,10 @@ export const galleryItems = [
 		date: "Jan 5",
 		location: "Portugal",
 		description: "Photography inspired modern piece",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512831718_f62bc54a.webp",
+		),
 	},
 	{
 		id: 10,
@@ -271,6 +328,10 @@ export const galleryItems = [
 		date: "Dec 1",
 		location: "Portugal",
 		description: "Contemporary clockwork sculpture",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512841276_2336a6c0.webp",
+		),
 	},
 	{
 		id: 11,
@@ -298,6 +359,10 @@ export const galleryItems = [
 		date: "Nov 8",
 		location: "Portugal",
 		description: "Mechanical timepiece with layered gears",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512842275_28aadfb8.webp",
+		),
 	},
 	{
 		id: 12,
@@ -325,6 +390,10 @@ export const galleryItems = [
 		date: "Oct 2",
 		location: "Portugal",
 		description: "Large scale observational artwork",
+		profileType: "inventor",
+		media: buildMedia(
+			"https://d64gsuwffb70l.cloudfront.net/691d11a8c51ca5f9cbb75a94_1763512843188_397c6bf6.webp",
+		),
 	},
 ];
 
