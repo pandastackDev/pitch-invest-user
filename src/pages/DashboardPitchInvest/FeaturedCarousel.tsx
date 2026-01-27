@@ -304,11 +304,16 @@ const FeaturedCarousel = (_props: FeaturedCarouselProps): JSX.Element => {
 										</div>
 									)}
 									<div className="col-6">
-										<img
-											src={currentUser.productImage2}
-											alt="Product 2"
-											className="w-100 pi-left-product-img"
-										/>
+										<div className="pi-left-product-media pi-left-product-media--video">
+											<img
+												src={currentUser.productImage2}
+												alt="Product video thumbnail"
+												className="w-100 pi-left-product-img"
+											/>
+											<span className="pi-left-product-video-icon" aria-hidden="true">
+												<i className="ri-play-circle-fill" />
+											</span>
+										</div>
 									</div>
 								</div>
 								<div className="bg-gray-50 rounded p-3 text-center">
