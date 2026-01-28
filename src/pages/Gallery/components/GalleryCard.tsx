@@ -67,7 +67,22 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 					</div>
 				) : null} */}
 				<div className="pi-gallery-media-grid">
-					<div className="pi-gallery-media-tile pi-gallery-media-tile-main">
+					<div 
+						className="pi-gallery-media-tile pi-gallery-media-tile-main"
+						onClick={(e) => {
+							e.stopPropagation();
+							const returnUrl = `${location.pathname}${location.search}`;
+							if (typeof window !== "undefined") {
+								sessionStorage.setItem("galleryScrollY", String(window.scrollY));
+								sessionStorage.setItem("galleryActiveCardId", `pi-gallery-card-${idStr}`);
+							}
+							navigate(
+								`/gallery/${encodeURIComponent(
+									idStr,
+								)}?from=gallery&return=${encodeURIComponent(returnUrl)}`,
+							);
+						}}
+						>
 						<img
 							src={mediaLogo}
 							alt=""
@@ -83,7 +98,21 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 						/>
 					</div>
 
-					<div className="pi-gallery-media-col">
+					<div className="pi-gallery-media-col"
+						onClick={(e) => {
+							e.stopPropagation();
+							const returnUrl = `${location.pathname}${location.search}`;
+							if (typeof window !== "undefined") {
+								sessionStorage.setItem("galleryScrollY", String(window.scrollY));
+								sessionStorage.setItem("galleryActiveCardId", `pi-gallery-card-${idStr}`);
+							}
+							navigate(
+								`/gallery/${encodeURIComponent(
+									idStr,
+								)}?from=gallery&return=${encodeURIComponent(returnUrl)}`,
+							);
+						}}
+						>
 						<div className="pi-gallery-media-tile">
 							<img
 								src={mediaLogo}
@@ -99,7 +128,21 @@ const GalleryCard: React.FC<GalleryCardProps> = ({
 								}}
 							/>
 						</div>
-						<div className="pi-gallery-media-tile pi-gallery-media-video">
+						<div className="pi-gallery-media-tile pi-gallery-media-video"
+							onClick={(e) => {
+								e.stopPropagation();
+								const returnUrl = `${location.pathname}${location.search}`;
+								if (typeof window !== "undefined") {
+									sessionStorage.setItem("galleryScrollY", String(window.scrollY));
+									sessionStorage.setItem("galleryActiveCardId", `pi-gallery-card-${idStr}`);
+								}
+								navigate(
+									`/gallery/${encodeURIComponent(
+										idStr,
+									)}?from=gallery&return=${encodeURIComponent(returnUrl)}`,
+								);
+							}}
+							>
 							<img
 								src={mediaLogo}
 								alt=""
