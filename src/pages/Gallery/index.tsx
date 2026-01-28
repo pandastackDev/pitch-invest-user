@@ -512,7 +512,7 @@ const Gallery: React.FC = () => {
 					{/* Gallery cards/grid */}
 					{displayItems.length > 0 ? (
 						<GalleryGrid
-							items={displayItems}
+							items={displayItems as GalleryItem[]}
 							likedById={likedById}
 							onToggleLike={handleToggleLike}
 							onMessage={handleMessage}

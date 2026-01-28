@@ -48,7 +48,8 @@ const StartupProfileCard: React.FC<StartupProfileCardProps> = ({
 									</span>
 								</div>
 							</div>
-						</Col>
+						</div>
+					</Col>
 
 					{/* Video Frame */}
 					<Col xs={6}>

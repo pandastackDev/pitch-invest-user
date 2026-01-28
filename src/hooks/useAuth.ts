@@ -150,49 +150,33 @@ export function useAuth() {
     if (signingOutRef.current) return;
 
     signingOutRef.current = true;
-    
-    // Clear local state first
+
+    // Clear storage markers first so components that read from storage (legacy auth)
+    // see the logged-out state on the next render, without waiting for async SDK calls.
+    try {
+      localStorage.removeItem('supabase.auth.token');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('authUser');
+    } catch (storageError) {
+      console.warn('Failed to clear storage:', storageError);
+    }
+
+    // Clear local UI state immediately.
     if (mountedRef.current) {
       setUser(null);
       setProfile(null);
       setLoading(false);
       fetchingProfileRef.current = false;
     }
-    
-    // Clear localStorage and sessionStorage
+
+    // Ensure Supabase internal session is cleared (prevents it from re-populating storage later).
     try {
-      const storageKey = 'supabase.auth.token';
-      localStorage.removeItem(storageKey);
-      sessionStorage.removeItem('authUser');
-    } catch (storageError) {
-      console.warn('Failed to clear storage:', storageError);
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch (error) {
+      console.warn('Supabase signOut error (non-critical):', error);
     }
-    
-    // Sign out from Supabase
-    const signOutWithTimeout = async () => {
-      try {
-        const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Timeout')), 2000);
-        });
-        
-        await Promise.race([
-          supabase.auth.signOut({ scope: 'local' }),
-          timeoutPromise
-        ]);
-      } catch (error: any) {
-        if (error.message === 'Timeout') {
-          console.warn('Supabase signOut timed out (non-critical)');
-        } else {
-          console.warn('Supabase signOut error (non-critical):', error);
-        }
-      }
-    };
-    
-    signOutWithTimeout();
-    
-    setTimeout(() => {
-      signingOutRef.current = false;
-    }, 500);
+
+    signingOutRef.current = false;
   };
 
   return { user, profile, loading, signOut };

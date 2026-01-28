@@ -29,12 +29,8 @@ const Logout = (_props: any) => {
 			setIsLoggingOut(true);
 
 			try {
-				// If Supabase user exists, use Supabase signOut
-				if (user) {
-					await signOut();
-					// Clear sessionStorage
-					sessionStorage.removeItem("authUser");
-				}
+				// Always attempt auth sign-out so stale sessions can't linger in the SDK/storage.
+				await signOut();
 				
 				// Always call Redux logout for compatibility
 				dispatch(logoutUser());

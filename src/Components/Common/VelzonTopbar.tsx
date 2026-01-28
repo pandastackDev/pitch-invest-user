@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownMenu, DropdownToggle, Form } from "reactstrap";
 import { createSelector } from "reselect";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoDark from "../../assets/images/logo-dark.png";
 import logoLight from "../../assets/images/logo-light.png";
 import logoSm from "../../assets/images/logo-sm.png";
@@ -11,6 +11,8 @@ import NotificationDropdown from "./NotificationDropdown";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchOption from "./SearchOption";
 import { changeSidebarVisibility } from "../../slices/thunks";
+import { useAuth } from "../../hooks/useAuth";
+import { UnknownAction } from "redux";
 
 interface TopbarProps {
   headerClass?: string;
@@ -18,6 +20,8 @@ interface TopbarProps {
 
 const VelzonTopbar = ({ headerClass }: TopbarProps) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
 
   const selectDashboardData = createSelector(
     (state: any) => state.Layout,
@@ -25,6 +29,7 @@ const VelzonTopbar = ({ headerClass }: TopbarProps) => {
   );
 
   const sidebarVisibilitytype = useSelector(selectDashboardData);
+  const reduxLoginUser = useSelector((state: any) => state?.Login?.user);
 
   const [search, setSearch] = useState(false);
   const toogleSearch = () => setSearch(!search);
@@ -32,7 +37,7 @@ const VelzonTopbar = ({ headerClass }: TopbarProps) => {
   const toogleMenuBtn = () => {
     const windowSize = document.documentElement.clientWidth;
     const humberIcon = document.querySelector(".hamburger-icon") as HTMLElement;
-    dispatch(changeSidebarVisibility("show"));
+    dispatch(changeSidebarVisibility("show") as unknown as UnknownAction);
 
     if (windowSize > 767) humberIcon?.classList.toggle("open");
 
@@ -63,6 +68,28 @@ const VelzonTopbar = ({ headerClass }: TopbarProps) => {
       }
     }
   };
+
+  const isAuthenticated = useMemo(() => {
+    if (user) return true;
+
+    const hasReduxToken =
+      reduxLoginUser &&
+      typeof reduxLoginUser === "object" &&
+      !!(reduxLoginUser.token || reduxLoginUser.accessToken);
+    if (hasReduxToken) return true;
+
+    if (typeof window === "undefined") return false;
+
+    const rawAuthUser = sessionStorage.getItem("authUser");
+    if (!rawAuthUser || rawAuthUser === "null" || rawAuthUser === "{}") return false;
+
+    try {
+      const parsed = JSON.parse(rawAuthUser) as { token?: string; accessToken?: string };
+      return !!(parsed?.token || parsed?.accessToken);
+    } catch {
+      return false;
+    }
+  }, [reduxLoginUser, user]);
 
   return (
     <header id="page-topbar" className={headerClass}>
@@ -139,9 +166,27 @@ const VelzonTopbar = ({ headerClass }: TopbarProps) => {
 
             <LanguageDropdown />
 
-            <NotificationDropdown />
-
-            <ProfileDropdown />
+            {isAuthenticated ? (
+              <>
+                <NotificationDropdown />
+                <ProfileDropdown />
+              </>
+            ) : authLoading ? null : (
+              <div className="d-flex align-items-center gap-2 ms-2">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="btn btn-primary rounded-pill px-3"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => navigate("/register")}
+                  className="btn btn-primary rounded-pill px-3"
+                >
+                  Signup
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

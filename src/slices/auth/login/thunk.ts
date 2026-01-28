@@ -168,15 +168,12 @@ export const logoutUser = () => async (dispatch: (action: unknown) => void) => {
 	}
 
 	try {
-		// Check if Supabase is configured and sign out (best-effort).
-		const hasSupabase =
-			import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY;
-		if (hasSupabase) {
-			try {
-				await supabase.auth.signOut({ scope: "local" });
-			} catch {
-				// ignore sign out failures; we already cleared local session markers
-			}
+		// Always attempt a local Supabase sign-out (best-effort) so the SDK can't
+		// re-hydrate a stale in-memory session back into storage.
+		try {
+			await supabase.auth.signOut({ scope: "local" });
+		} catch {
+			// ignore sign out failures; we already cleared local session markers
 		}
 
 		const fireBaseBackend = getFirebaseBackend();

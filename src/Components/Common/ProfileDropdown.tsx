@@ -121,10 +121,8 @@ const ProfileDropdown = () => {
 		try {
 			setIsSigningOut(true);
 			
-			// Use Supabase signOut if available
-			if (user) {
-				await signOut();
-			}
+			// Always attempt auth sign-out so stale sessions can't linger in the SDK/storage.
+			await signOut();
 			
 			// Always call Redux logout for compatibility
 			dispatch(logoutUser() as any);
