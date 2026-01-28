@@ -175,7 +175,7 @@ const VelzonTopbar = ({ headerClass }: TopbarProps) => {
               <div className="d-flex align-items-center gap-2 ms-2">
                 <button
                   onClick={() => navigate("/login")}
-                  className="btn btn-primary rounded-pill px-3"
+                  className="btn btn-ghost-primary rounded-pill px-3"
                 >
                   Login
                 </button>
